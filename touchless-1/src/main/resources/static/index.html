@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0f1e">
+  <meta name="description" content="VoxControl - a hands-free, voice-controlled interface for messages, calls, reminders and emergency help.">
+  <title>VoxControl</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a0f1e'/%3E%3Crect x='25' y='12' width='14' height='28' rx='7' fill='%234de8c2'/%3E%3Cpath d='M16 32a16 16 0 0032 0M32 48v6' stroke='%234de8c2' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-voice="off" data-screen="home">
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/></symbol>
+      <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.6 7.1L4 20l1.1-4.6A8 8 0 1121 12z"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c2.5.2 4.2 1.8 4.5 4.5"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17v-6a6 6 0 0112 0v6l2 2H4z"/><path d="M10 21a2 2 0 004 0"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18.5v.01"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 006 6L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></symbol>
+      <symbol id="i-phone-off" viewBox="0 0 24 24"><g transform="rotate(135 12 12)"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 006 6L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></g></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.7-1.5 1.2-1.5 2.5M12 17.5v.01"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></symbol>
+      <symbol id="i-volume-off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#screen">Skip to content</a>
+
+  <div class="device">
+    <div class="statusbar">
+      <span id="clock">--:--</span>
+      <span class="brand-dot" aria-hidden="true"></span>
+      <button id="muteBtn" class="icon-btn tiny" type="button" aria-label="Turn spoken replies off"></button>
+    </div>
+
+    <div id="voiceBar" class="voicebar" role="status" aria-live="polite" hidden>
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <div class="voice-copy"><b id="voiceLabel">Listening</b><span id="voiceText"></span></div>
+    </div>
+
+    <main id="screen" class="screen" tabindex="-1"></main>
+
+    <nav class="dock" aria-label="Main controls">
+      <button id="dockHome" class="dock-btn" type="button" aria-label="Home">
+        <svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span>Home</span>
+      </button>
+      <button id="micFab" class="mic-fab" type="button" aria-pressed="false" aria-label="Turn on voice control">
+        <svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg>
+      </button>
+      <button id="dockHelp" class="dock-btn" type="button" aria-label="What can I say?">
+        <svg class="icon" aria-hidden="true"><use href="#i-help"/></svg><span>Help</span>
+      </button>
+    </nav>
+
+    <div id="modalHost" class="modal-host" hidden></div>
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
